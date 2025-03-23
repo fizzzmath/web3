@@ -28,7 +28,7 @@ func validate(appl Application) []string {
 		valid = append(valid, "Неверный формат заполнения: поле ФИО")
 	}
 
-	pattern = `^\+*\d{11}$`
+	pattern = `^(\+7|8)9\d{9}$`
 	re = regexp.MustCompile(pattern)
 
 	if !re.MatchString(appl.phone) {
@@ -40,10 +40,6 @@ func validate(appl Application) []string {
 
 	if !re.MatchString(appl.email) {
 		valid = append(valid, "Неверный формат заполнения: поле E-mail")
-	}
-
-	if len(valid) == 0 {
-		valid = append(valid, "Данные успешно сохранены")
 	}
 
 	return valid
@@ -98,6 +94,7 @@ func applicationHandler(w http.ResponseWriter, r *http.Request) {
 		valid = validate(appl)
 
 		if len(valid) == 0 {
+			valid = append(valid, "Данные успешно сохранены")
 			insertData(appl)
 		}
 	}
